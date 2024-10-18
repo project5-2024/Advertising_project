@@ -1,0 +1,8 @@
+{
+  "type": "module",
+  "dependencies": {
+    "express": "^4.21.1",
+    "mongodb": "^6.9.0",
+    "require": "^2.4.20"
+  }
+}
