@@ -28,7 +28,9 @@ app.get("/login/username/:username/password/:password", async (req,res) => {
   console.log(req.params);
   if(JSON.stringify(req.params) === JSON.stringify(userlogin)){
     console.log("Working")
-    res.send(req.params);
+    res.status(200).send(req.params);
+  }else{
+    res.status(401).send({ error: "User not found or credentials do not match" });
   }
 });
 
