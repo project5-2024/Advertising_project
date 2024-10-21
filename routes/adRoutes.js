@@ -29,22 +29,9 @@ export default (db) => {
   });
 
 
-  const temp = {
-    sports: 85,
-    music: 84, 
-    food: 24,
-    travel: 76,
-    movies: 76,
-    technology: 56, 
-    fitness: 99,
-    gaming: 16,
-    books: 45,
-    fashion: 0
-  }
-
-  router.get("/fetch_ads/", async (req, res) => {
+  router.get("/fetch_ads/:ad_preference", async (req, res) => {
     try {
-      const ads = await fetchRelevantAds(db, temp);
+      const ads = await fetchRelevantAds(db, req.params.ad_preference);
       console.log(ads);
       if (ads) {
         res.status(200).send(ads);
