@@ -1,10 +1,10 @@
 import express from "express";
-import { createAd, fetchAd } from "../controllers/adController.js";
+import { createAd, fetchAd, fetchRelevantAds } from "../controllers/adController.js";
 
 const router = express.Router();
 
 export default (db) => {
-  router.post("/", async (req, res) => {
+  router.post("/insert_ad/", async (req, res) => {
     const { name, ad_data, image } = req.body;
 
     try {
@@ -15,9 +15,9 @@ export default (db) => {
     }
   });
 
-  router.get("/:name", async (req, res) => {
+  router.get("/fetch_ad/:ad_id", async (req, res) => {
     try {
-      const ad = await fetchAd(db, req.params.name);
+      const ad = await fetchAd(db, req.params.ad_id);
       if (ad) {
         res.status(200).send(ad);
       } else {
@@ -27,6 +27,35 @@ export default (db) => {
       res.status(500).send({ error: error.message });
     }
   });
+
+
+  const temp = {
+    sports: 45,
+    music: 54, 
+    food: 34,
+    travel: 76,
+    movies: 76,
+    technology: 56, 
+    fitness: 99,
+    gaming: 96,
+    books: 45,
+    fashion: 45
+  }
+
+  router.get("/fetch_ads/", async (req, res) => {
+    try {
+      const ads = await fetchRelevantAds(db, temp);
+      console.log(ads);
+      if (ads) {
+        res.status(200).send(ads);
+      } else {
+        res.status(404).send({ error: "Ad not found" });
+      }
+    } catch (error) {
+      res.status(500).send({ error: error.message });
+    }
+  });
+  
 
   return router;
 };

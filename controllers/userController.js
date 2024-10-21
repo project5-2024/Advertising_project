@@ -32,3 +32,16 @@ export async function updateUserData(db, username, userdata) {
   );
   return result;
 }
+
+export async function getParameters(db, username) {
+  const users = db.collection("users");
+  const result = await users.findOne({ username });
+
+  if (users){
+    return users.ad_preferences;
+  }else{
+    return null;
+  }
+}
+
+

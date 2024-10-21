@@ -1,3 +1,5 @@
+import { raw } from "express";
+
 export async function createAd(db, name, adData, image) {
     const ads = db.collection("ads");
   
@@ -11,8 +13,33 @@ export async function createAd(db, name, adData, image) {
     return result.insertedId;
   }
   
-  export async function fetchAd(db, name) {
+  export async function fetchAd(db, ad_id) {
     const ads = db.collection("ads");
-    return await ads.findOne({ ad_name: name });
+    return await ads.findOne({ _id: ad_id });
+  }
+
+  export async function fetchRelevantAds(db, ad_preferences){
+    const ads = db.collection("ads");
+    var range = 30;
+    const limit = 5;
+
+    const query = {
+      "ad_data.sports": { $lte: ad_preferences.sports+range, $gte: ad_preferences.sports-range},
+      "ad_data.music": { $lte: ad_preferences.music+range, $gte: ad_preferences.music-range},
+      "ad_data.food": { $lte: ad_preferences.food+range, $gte: ad_preferences.food-range},
+      "ad_data.travel": { $lte: ad_preferences.travel+range, $gte: ad_preferences.travel-range},
+      "ad_data.movies": { $lte: ad_preferences.movies+range, $gte: ad_preferences.movies-range},
+      "ad_data.technology": { $lte: ad_preferences.technology+range, $gte: ad_preferences.technology-range},
+      "ad_data.fitness": { $lte: ad_preferences.fitness+range, $gte: ad_preferences.fitness-range},
+      "ad_data.gaming": { $lte: ad_preferences.gaming+range, $gte: ad_preferences.gaming-range},
+      "ad_data.books": { $lte: ad_preferences.books+range, $gte: ad_preferences.books-range},
+      "ad_data.fashion": { $lte: ad_preferences.fashion+range, $gte: ad_preferences.fashion-range}
+    }
+
+    const ads_array = await ads.find(query).limit(limit).toArray();
+    console.log(ads_array);
+    //if (ads_array.)
+    return ads_array;
   }
   
+ 

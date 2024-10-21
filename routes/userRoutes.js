@@ -1,5 +1,5 @@
 import express from "express";
-import { registerUser, loginUser, updateUserData } from "../controllers/userController.js";
+import { registerUser, loginUser, updateUserData, getParameters } from "../controllers/userController.js";
 import Joi from "joi";
 
 const router = express.Router();
@@ -38,7 +38,7 @@ export default (db) => {
         }
       });
 
-      router.put("/:username", async (req, res) => {
+      router.put("/set_parameters/:username", async (req, res) => {
         const { username } = req.params;
         const { userdata } = req.body;
     
@@ -53,7 +53,33 @@ export default (db) => {
           res.status(500).send({ error: error.message });
         }
       });
+
+      router.get("/get_parameters/:username", async (res, req) => {
+        const { username } = req.params;
+
+        try{
+          const result = await getParameters(db, username);
+          if (result){
+            res.status(200).send({message: "Ad preferences fetched"});
+          }else {
+            res.status(404).send({error: "User not found"});
+          }
+        }catch (error){
+          res.status(500).send({error: error.message})
+        }
+      })
+
+      
     
       return router;
 
 }
+
+
+
+
+
+
+
+
+
