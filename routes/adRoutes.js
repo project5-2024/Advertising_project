@@ -30,16 +30,16 @@ export default (db) => {
 
 
   const temp = {
-    sports: 45,
-    music: 54, 
-    food: 34,
+    sports: 85,
+    music: 84, 
+    food: 24,
     travel: 76,
     movies: 76,
     technology: 56, 
     fitness: 99,
-    gaming: 96,
+    gaming: 16,
     books: 45,
-    fashion: 45
+    fashion: 0
   }
 
   router.get("/fetch_ads/", async (req, res) => {
