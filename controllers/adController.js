@@ -20,25 +20,32 @@ export async function createAd(db, name, adData, image) {
 
   export async function fetchRelevantAds(db, ad_preferences){
     const ads = db.collection("ads");
-    var range = 30;
+    var range = 5;
     const limit = 5;
+    var size = 0;
 
-    const query = {
-      "ad_data.sports": { $lte: ad_preferences.sports+range, $gte: ad_preferences.sports-range},
-      "ad_data.music": { $lte: ad_preferences.music+range, $gte: ad_preferences.music-range},
-      "ad_data.food": { $lte: ad_preferences.food+range, $gte: ad_preferences.food-range},
-      "ad_data.travel": { $lte: ad_preferences.travel+range, $gte: ad_preferences.travel-range},
-      "ad_data.movies": { $lte: ad_preferences.movies+range, $gte: ad_preferences.movies-range},
-      "ad_data.technology": { $lte: ad_preferences.technology+range, $gte: ad_preferences.technology-range},
-      "ad_data.fitness": { $lte: ad_preferences.fitness+range, $gte: ad_preferences.fitness-range},
-      "ad_data.gaming": { $lte: ad_preferences.gaming+range, $gte: ad_preferences.gaming-range},
-      "ad_data.books": { $lte: ad_preferences.books+range, $gte: ad_preferences.books-range},
-      "ad_data.fashion": { $lte: ad_preferences.fashion+range, $gte: ad_preferences.fashion-range}
+    
+    var ads_array= null;
+    while (size < 6){
+      const query = {
+        "ad_data.sports": { $lte: ad_preferences.sports+range, $gte: ad_preferences.sports-range},
+        "ad_data.music": { $lte: ad_preferences.music+range, $gte: ad_preferences.music-range},
+        "ad_data.food": { $lte: ad_preferences.food+range, $gte: ad_preferences.food-range},
+        "ad_data.travel": { $lte: ad_preferences.travel+range, $gte: ad_preferences.travel-range},
+        "ad_data.movies": { $lte: ad_preferences.movies+range, $gte: ad_preferences.movies-range},
+        "ad_data.technology": { $lte: ad_preferences.technology+range, $gte: ad_preferences.technology-range},
+        "ad_data.fitness": { $lte: ad_preferences.fitness+range, $gte: ad_preferences.fitness-range},
+        "ad_data.gaming": { $lte: ad_preferences.gaming+range, $gte: ad_preferences.gaming-range},
+        "ad_data.books": { $lte: ad_preferences.books+range, $gte: ad_preferences.books-range},
+        "ad_data.fashion": { $lte: ad_preferences.fashion+range, $gte: ad_preferences.fashion-range}
+      }
+      ads_array = await ads.find(query).toArray();
+      size = Object.getOwnPropertyNames(ads_array).length;
+      range+=5;
+      console.log(size);
+      console.log(range);
     }
-
-    const ads_array = await ads.find(query).limit(limit).toArray();
-    console.log(ads_array);
-    //if (ads_array.)
+    
     return ads_array;
   }
   
