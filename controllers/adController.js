@@ -133,7 +133,8 @@ export async function createAd(db, name, adData, image) {
               ] }, 
               1, 0 
             ] 
-          }
+          },
+          ad_image: 1
         }
       },
       {
@@ -158,7 +159,13 @@ export async function createAd(db, name, adData, image) {
             ]
           }
         }
-      }
+      },
+      {
+        $project: {
+          ad_image : 1,
+          _id: 0
+          }
+        }
     ];
       
       ads_array = await ads.aggregate(query1).limit(limit).toArray();

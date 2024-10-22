@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import { ObjectId } from 'mongodb'; 
 
 export async function registerUser(db, username, password, isAdmin) {
   const users = db.collection("users");
@@ -33,12 +34,13 @@ export async function updateUserData(db, username, userdata) {
   return result;
 }
 
-export async function getParameters(db, username) {
+export async function getParameters(db, userID) {
   const users = db.collection("users");
-  const result = await users.findOne({ username });
+  
+  const result = await users.findOne( {"_id": new ObjectId(userID)} );
 
-  if (users){
-    return users.ad_preferences;
+  if (result){
+    return result.ad_preferences;
   }else{
     return null;
   }

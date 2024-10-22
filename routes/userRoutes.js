@@ -54,13 +54,14 @@ export default (db) => {
         }
       });
 
-      router.get("/get_parameters/:username", async (res, req) => {
-        const { username } = req.params;
+      router.post("/get_parameters/:userID", async (req, res) => {
+        const { userID } = req.params;
+        console.log(userID);
 
         try{
-          const result = await getParameters(db, username);
+          const result = await getParameters(db, userID);
           if (result){
-            res.status(200).send({message: "Ad preferences fetched"});
+            res.status(200).send(result);
           }else {
             res.status(404).send({error: "User not found"});
           }
