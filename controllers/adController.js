@@ -23,11 +23,10 @@ export async function fetchRelevantAds(db, ad_preferences){
     const ads = db.collection("ads");
     var range = 0;
     var size = 0;
-    const limit = 9;
+    const limit = 10;
     const rangeIncrease = 1;
   
     var ads_array = null;
-    var map = new Map();
     while (size < limit && range<100){
       
     const query = {
@@ -184,13 +183,13 @@ export async function fetchRelevantAds(db, ad_preferences){
       
       ads_array = await ads.aggregate(query1).limit(limit).toArray();
       size = Object.getOwnPropertyNames(ads_array).length;
-      map.set(range,ads_array);
+      
       range+=rangeIncrease;
       console.log(size);
       console.log(range);
     }
     const ads_url = randomObjectChooser(ads_array)
-    console.log(map)
+   
     return ads_url;
 }
   
@@ -199,6 +198,7 @@ function randomObjectChooser(object){
   const keys = Object.keys(object);
   return object[keys[keys.length * Math.random() << 0]];
 }
+
 
 
   
