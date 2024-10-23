@@ -1,4 +1,5 @@
-import { raw } from "express";
+//import { raw } from "express";
+//import { func } from "joi";
 
 export async function createAd(db, name, adData, image) {
     const ads = db.collection("ads");
@@ -13,19 +14,21 @@ export async function createAd(db, name, adData, image) {
     return result.insertedId;
   }
   
-  export async function fetchAd(db, ad_id) {
+export async function fetchAd(db, ad_id) {
     const ads = db.collection("ads");
     return await ads.findOne({ _id: ad_id });
-  }
+}
 
-  export async function fetchRelevantAds(db, ad_preferences){
+export async function fetchRelevantAds(db, ad_preferences){
     const ads = db.collection("ads");
-    var range = 5;
+    var range = 0;
     var size = 0;
-    const limit =5;
+    const limit = 9;
+    const rangeIncrease = 1;
   
-    var ads_array= null;
-    while (size < 6 && range<100){
+    var ads_array = null;
+    var map = new Map();
+    while (size < limit && range<100){
       
     const query = {
       "ad_data.sports": { $lte: ad_preferences.sports+range, $gte: ad_preferences.sports-range},
@@ -39,7 +42,8 @@ export async function createAd(db, name, adData, image) {
       "ad_data.books": { $lte: ad_preferences.books+range, $gte: ad_preferences.books-range},
       "ad_data.fashion": { $lte: ad_preferences.fashion+range, $gte: ad_preferences.fashion-range}
     }
-      
+    
+    
 
     const query1 = [
       {
@@ -48,7 +52,8 @@ export async function createAd(db, name, adData, image) {
             $cond: [
               { $and: [
                   { $gte: ["$ad_data.sports", ad_preferences.sports - range] },
-                  { $lte: ["$ad_data.sports", ad_preferences.sports + range] }
+                  { $lte: ["$ad_data.sports", ad_preferences.sports + range] },
+                  { $gte: ["$ad_data.sports", 100-range]}
               ] }, 
               1, 0 
             ] 
@@ -57,7 +62,8 @@ export async function createAd(db, name, adData, image) {
             $cond: [
               { $and: [
                   { $gte: ["$ad_data.music", ad_preferences.music - range] },
-                  { $lte: ["$ad_data.music", ad_preferences.music + range] }
+                  { $lte: ["$ad_data.music", ad_preferences.music + range] },
+                  { $gte: ["$ad_data.music", 100-range]}
               ] }, 
               1, 0 
             ] 
@@ -66,7 +72,8 @@ export async function createAd(db, name, adData, image) {
             $cond: [
               { $and: [
                   { $gte: ["$ad_data.food", ad_preferences.food - range] },
-                  { $lte: ["$ad_data.food", ad_preferences.food + range] }
+                  { $lte: ["$ad_data.food", ad_preferences.food + range] },
+                  { $gte: ["$ad_data.food", 100-range]}
               ] }, 
               1, 0 
             ] 
@@ -75,7 +82,8 @@ export async function createAd(db, name, adData, image) {
             $cond: [
               { $and: [
                   { $gte: ["$ad_data.travel", ad_preferences.travel - range] },
-                  { $lte: ["$ad_data.travel", ad_preferences.travel + range] }
+                  { $lte: ["$ad_data.travel", ad_preferences.travel + range] },
+                  { $gte: ["$ad_data.travel", 100-range]}
               ] }, 
               1, 0 
             ] 
@@ -84,7 +92,8 @@ export async function createAd(db, name, adData, image) {
             $cond: [
               { $and: [
                   { $gte: ["$ad_data.movies", ad_preferences.movies - range] },
-                  { $lte: ["$ad_data.movies", ad_preferences.movies + range] }
+                  { $lte: ["$ad_data.movies", ad_preferences.movies + range] },
+                  { $gte: ["$ad_data.movies", 100-range]}
               ] }, 
               1, 0 
             ] 
@@ -93,7 +102,8 @@ export async function createAd(db, name, adData, image) {
             $cond: [
               { $and: [
                   { $gte: ["$ad_data.technology", ad_preferences.technology - range] },
-                  { $lte: ["$ad_data.technology", ad_preferences.technology + range] }
+                  { $lte: ["$ad_data.technology", ad_preferences.technology + range] },
+                  { $gte: ["$ad_data.technology", 100-range]}
               ] }, 
               1, 0 
             ] 
@@ -102,7 +112,8 @@ export async function createAd(db, name, adData, image) {
             $cond: [
               { $and: [
                   { $gte: ["$ad_data.fitness", ad_preferences.fitness - range] },
-                  { $lte: ["$ad_data.fitness", ad_preferences.fitness + range] }
+                  { $lte: ["$ad_data.fitness", ad_preferences.fitness + range] },
+                  { $gte: ["$ad_data.fitness", 100-range]}
               ] }, 
               1, 0 
             ] 
@@ -111,7 +122,8 @@ export async function createAd(db, name, adData, image) {
             $cond: [
               { $and: [
                   { $gte: ["$ad_data.gaming", ad_preferences.gaming - range] },
-                  { $lte: ["$ad_data.gaming", ad_preferences.gaming + range] }
+                  { $lte: ["$ad_data.gaming", ad_preferences.gaming + range] },
+                  { $gte: ["$ad_data.gaming", 100-range]}
               ] }, 
               1, 0 
             ] 
@@ -120,7 +132,8 @@ export async function createAd(db, name, adData, image) {
             $cond: [
               { $and: [
                   { $gte: ["$ad_data.books", ad_preferences.books - range] },
-                  { $lte: ["$ad_data.books", ad_preferences.books + range] }
+                  { $lte: ["$ad_data.books", ad_preferences.books + range] },
+                  { $gte: ["$ad_data.books", 100-range]}
               ] }, 
               1, 0 
             ] 
@@ -129,7 +142,8 @@ export async function createAd(db, name, adData, image) {
             $cond: [
               { $and: [
                   { $gte: ["$ad_data.fashion", ad_preferences.fashion - range] },
-                  { $lte: ["$ad_data.fashion", ad_preferences.fashion + range] }
+                  { $lte: ["$ad_data.fashion", ad_preferences.fashion + range] },
+                  { $gte: ["$ad_data.fashion", 100-range]}
               ] }, 
               1, 0 
             ] 
@@ -170,12 +184,22 @@ export async function createAd(db, name, adData, image) {
       
       ads_array = await ads.aggregate(query1).limit(limit).toArray();
       size = Object.getOwnPropertyNames(ads_array).length;
-      range+=5;
+      map.set(range,ads_array);
+      range+=rangeIncrease;
       console.log(size);
       console.log(range);
     }
-    
-    return ads_array;
-  }
+    const ads_url = randomObjectChooser(ads_array)
+    console.log(map)
+    return ads_url;
+}
+  
+
+function randomObjectChooser(object){
+  const keys = Object.keys(object);
+  return object[keys[keys.length * Math.random() << 0]];
+}
+
+
   
  
